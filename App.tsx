@@ -9,20 +9,30 @@
  */
 
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
-
+import {StyleSheet, View, Text} from 'react-native';
+import {createTextStyle, Filler} from './uiUtils';
+import {Row} from './components';
+import sizes from './src/styles/sizes';
 
 const App = () => {
   return (
-    <View style={{ backgroundColor: 'green', flex: 1 }}>
+    <View style={{backgroundColor: 'gray', flex: 1}}>
+      <Filler />
+      <Row
+        alignCenter
+        style={{
+          height: 30,
+          backgroundColor: 'white',
+          paddingHorizontal: sizes.padding,
+        }}>
+        <Text style={{...createTextStyle({s: 1}), flex: 1}}>
+          Добавить подпись
+        </Text>
+      </Row>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-});
+const styles = StyleSheet.create({});
 
 export default App;
