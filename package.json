@@ -24,6 +24,11 @@
     "react-test-renderer": "16.8.6",
     "typescript": "^3.6.3"
   },
+  "rnpm": {
+    "assets": [
+      "./assets/"
+    ]
+  },
   "jest": {
     "preset": "react-native",
     "moduleFileExtensions": [

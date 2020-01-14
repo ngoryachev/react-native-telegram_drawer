@@ -1,8 +1,14 @@
 import React from 'react';
 import {GestureResponderEvent, StyleProp, TextStyle, View} from 'react-native';
 
-export const Spacer = ({w = 0, h = 0}: {w?: number; h?: number}) => (
-  <View style={{height: h, width: w}} />
+type SpacerProps = {
+  w?: number;
+  h?: number;
+  c?: string;
+};
+
+export const Spacer = ({w = 0, h = 0, c = 'transparent'}: SpacerProps) => (
+  <View style={{height: h, width: w, backgroundColor: c}} />
 );
 
 export const Filler = ({}) => <View style={{flex: 1}} />;
@@ -36,6 +42,8 @@ export const createTextStyle = ({s, c, center}: TextStyleProps): {} => {
 };
 
 export const centerStyle: {} = {justifyContent: 'center', alignItems: 'center'};
+
+export const wh = (w: number, h: number = w) => ({width: w, height: h});
 
 export type TouchableOpacityCallback = (
   event: GestureResponderEvent,

@@ -9,26 +9,62 @@
  */
 
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
-import {createTextStyle, Filler} from './uiUtils';
-import {Row} from './components';
+import {StyleSheet, View, Image, TextInput, Text} from 'react-native';
+import {Filler, Spacer, wh} from './uiUtils';
+import {Circle, Column, Row} from './components';
 import sizes from './src/styles/sizes';
 
 const App = () => {
   return (
-    <View style={{backgroundColor: 'gray', flex: 1}}>
+    <View style={{backgroundColor: '#F2F7FA', flex: 1}}>
       <Filler />
-      <Row
-        alignCenter
-        style={{
-          height: 30,
-          backgroundColor: 'white',
-          paddingHorizontal: sizes.padding,
-        }}>
-        <Text style={{...createTextStyle({s: 1}), flex: 1}}>
-          Добавить подпись
-        </Text>
-      </Row>
+      <Column>
+        <Row
+          alignCenter
+          style={{
+            height: 63,
+            backgroundColor: 'white',
+            paddingHorizontal: sizes.padding,
+          }}>
+          <Image style={{...wh(21), backgroundColor: '#958FAA'}} />
+          <Spacer w={31} />
+          <TextInput
+            placeholderTextColor="#958FAA"
+            placeholder="Сообщение..."
+            style={{
+              fontSize: 16,
+              color: '#3D3737',
+              flex: 1,
+              fontFamily: 'Source Sans Pro',
+            }}
+          />
+          <Image style={{...wh(19), backgroundColor: '#958FAA'}} />
+        </Row>
+        <View style={{width: '100%', height: 1, backgroundColor: '#F1F1F1'}} />
+        <Row
+          alignCenter
+          style={{
+            height: 50,
+            backgroundColor: 'white',
+            paddingHorizontal: sizes.padding,
+          }}>
+          <Image style={{...wh(4, 8), backgroundColor: '#958FAA'}} />
+          <Spacer w={4} />
+          <Text
+            style={{
+              fontSize: 16,
+              color: '#777777',
+              flex: 1,
+              fontFamily: 'Source Sans Pro',
+            }}>
+            назад
+          </Text>
+          <Filler />
+          <Circle size={40} color="#3D3737">
+            <Image style={{...wh(19), backgroundColor: 'white'}} />
+          </Circle>
+        </Row>
+      </Column>
     </View>
   );
 };
