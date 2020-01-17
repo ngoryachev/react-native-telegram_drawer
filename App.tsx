@@ -13,6 +13,9 @@ import {StyleSheet, View, Image, TextInput, Text} from 'react-native';
 import {Filler, Spacer, wh} from './uiUtils';
 import {Circle, Column, Row} from './components';
 import sizes from './src/styles/sizes';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import IconEvil from 'react-native-vector-icons/EvilIcons';
+import PickPhotoDrawer from "./src/components/PickPhotoDrawer";
 
 const App = () => {
   return (
@@ -26,7 +29,7 @@ const App = () => {
             backgroundColor: 'white',
             paddingHorizontal: sizes.padding,
           }}>
-          <Image style={{...wh(21), backgroundColor: '#958FAA'}} />
+          <Icon name="paperclip" size={21} color="#958FAA" />
           <Spacer w={31} />
           <TextInput
             placeholderTextColor="#958FAA"
@@ -38,7 +41,7 @@ const App = () => {
               fontFamily: 'Source Sans Pro',
             }}
           />
-          <Image style={{...wh(19), backgroundColor: '#958FAA'}} />
+          <IconEvil name="sc-telegram" size={25} color="#958FAA" />
         </Row>
         <View style={{width: '100%', height: 1, backgroundColor: '#F1F1F1'}} />
         <Row
@@ -48,7 +51,7 @@ const App = () => {
             backgroundColor: 'white',
             paddingHorizontal: sizes.padding,
           }}>
-          <Image style={{...wh(4, 8), backgroundColor: '#958FAA'}} />
+          <Icon name="angle-left" size={21} color="#958FAA" />
           <Spacer w={4} />
           <Text
             style={{
@@ -61,10 +64,11 @@ const App = () => {
           </Text>
           <Filler />
           <Circle size={40} color="#3D3737">
-            <Image style={{...wh(19), backgroundColor: 'white'}} />
+            <Icon name="microphone" size={16} color="white" />
           </Circle>
         </Row>
       </Column>
+      <PickPhotoDrawer />
     </View>
   );
 };

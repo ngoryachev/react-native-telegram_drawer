@@ -1,6 +1,12 @@
 import React from 'react';
-import {TouchableOpacity, View, ViewStyle} from 'react-native';
-import {centerStyle} from './uiUtils';
+import {
+  FlatListProps,
+  ListRenderItemInfo,
+  TouchableOpacity,
+  View, ViewProps,
+  ViewStyle,
+} from 'react-native';
+import {centerStyle, fdr, fww} from './uiUtils';
 import {Proc} from './declarations';
 
 export interface LineProps {
@@ -66,3 +72,24 @@ export const Circle = (props: CircleProps) => {
     </TouchableOpacity>
   );
 };
+
+function Grid_<ItemT>(props: FlatListProps<ItemT>) {
+  return (
+    <>
+      {props.ListHeaderComponent}
+      <View style={{...fdr, ...fww, ...(props.style as ViewProps)}}>
+        {(props.data || []).map((item: ItemT, index: number) =>
+          React.cloneElement(
+            // @ts-ignore
+            props.renderItem({item, index} as ListRenderItemInfo<ItemT>),
+            // @ts-ignore
+            {key: props.keyExtractor(item)},
+          ),
+        )}
+      </View>
+      {props.ListFooterComponent}
+    </>
+  );
+}
+
+export const Grid = Grid_;
