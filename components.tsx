@@ -52,13 +52,17 @@ export const Column = Line('column');
 export type CircleProps = {
   size: number;
   color: string;
-  children: any;
+  children?: any;
   onPress?: Proc;
+  style?: ViewStyle;
 };
 
 export const Circle = (props: CircleProps) => {
+  const Component: any = props.onPress ? TouchableOpacity : View;
+
   return (
-    <TouchableOpacity
+    <Component
+      hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
       activeOpacity={props.onPress ? undefined : 1}
       onPress={props.onPress}
       style={{
@@ -67,9 +71,10 @@ export const Circle = (props: CircleProps) => {
         borderRadius: props.size * 0.5,
         backgroundColor: props.color,
         ...centerStyle,
+        ...props.style,
       }}>
       {props.children}
-    </TouchableOpacity>
+    </Component>
   );
 };
 

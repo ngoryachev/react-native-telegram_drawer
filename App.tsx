@@ -9,24 +9,23 @@
  */
 
 import React from 'react';
-import {StyleSheet, View, Image, TextInput, Text} from 'react-native';
-import {Filler, Spacer, wh} from './uiUtils';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Filler, Spacer} from './uiUtils';
 import {Circle, Column, Row} from './components';
 import sizes from './src/styles/sizes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconEvil from 'react-native-vector-icons/EvilIcons';
-import PickPhotoDrawer from "./src/components/PickPhotoDrawer";
+import PickPhotoDrawer from './src/components/PickPhotoDrawer';
 
 const App = () => {
   return (
-    <View style={{backgroundColor: '#F2F7FA', flex: 1}}>
+    <View style={{backgroundColor: 'gray', flex: 1}}>
       <Filler />
       <Column>
         <Row
           alignCenter
           style={{
             height: 63,
-            backgroundColor: 'white',
             paddingHorizontal: sizes.padding,
           }}>
           <Icon name="paperclip" size={21} color="#958FAA" />
@@ -68,7 +67,7 @@ const App = () => {
           </Circle>
         </Row>
       </Column>
-      <PickPhotoDrawer />
+      <PickPhotoDrawer data={[1, 2, 3, 4]} />
     </View>
   );
 };
