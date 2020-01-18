@@ -1,9 +1,9 @@
 import React from 'react';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, View, Text} from 'react-native';
 import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
 import R from 'ramda';
-import {Circle, Grid, Row} from '../../components';
+import {Circle, Grid, Items, Row} from '../../components';
 import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -63,6 +63,23 @@ const Handle = () => (
   </Row>
 );
 
+type CircleButtonProps = {
+  isIcon: boolean;
+  name: string;
+  onPress: Proc;
+};
+
+const CircleButton = (props: CircleButtonProps) => (
+  <Circle size={40} color="#3D3737" onPress={props.onPress}>
+    {props.isIcon && <Icon name={props.name} color="#F2F2F2" size={18} />}
+    {!props.isIcon && (
+      <Text style={{fontSize: 12, fontWeight: 'bold', color: '#F2F2F2'}}>
+        {props.name}
+      </Text>
+    )}
+  </Circle>
+);
+
 interface PickPhotoDrawerState {
   selection: boolean[];
 }
@@ -110,7 +127,37 @@ class PickPhotoDrawer extends React.Component<
     );
   };
 
-  renderStrip = () => {};
+  noop = () => {};
+
+  renderStripItem = ({
+    item: {name, onPress, isIcon = true},
+  }: {
+    item: CircleButtonProps;
+  }) => <CircleButton name={name} onPress={onPress} isIcon={isIcon} />;
+
+  renderStrip = () => (
+    <Items
+      style={{
+        position: 'absolute',
+        height: 50,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        paddingHorizontal: 45,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}
+      data={[
+        {name: 'image', isIcon: true, onPress: this.noop},
+        {name: 'file-o', isIcon: true, onPress: this.noop},
+        {name: 'microphone', isIcon: true, onPress: this.noop},
+        {name: 'gif', isIcon: false, onPress: this.noop},
+      ]}
+      keyExtractor={R.prop('name')}
+      renderItem={this.renderStripItem}
+    />
+  );
 
   render = () => {
     return (
@@ -126,6 +173,7 @@ class PickPhotoDrawer extends React.Component<
           borderTopRightRadius: sizes.borderRadius,
         }}>
         {this.renderGrid()}
+        {this.renderStrip()}
       </View>
     );
   };

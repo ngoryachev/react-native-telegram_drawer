@@ -98,3 +98,20 @@ function Grid_<ItemT>(props: FlatListProps<ItemT>) {
 }
 
 export const Grid = Grid_;
+
+function Items_<ItemT>(props: FlatListProps<ItemT>) {
+  return (
+    <View style={{...fdr, ...(props.style as ViewProps)}}>
+      {(props.data || []).map((item: ItemT, index: number) =>
+        React.cloneElement(
+          // @ts-ignore
+          props.renderItem({item, index} as ListRenderItemInfo<ItemT>),
+          // @ts-ignore
+          {key: props.keyExtractor(item)},
+        ),
+      )}
+    </View>
+  );
+}
+
+export const Items = Items_;
