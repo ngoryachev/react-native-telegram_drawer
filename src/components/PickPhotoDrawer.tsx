@@ -1,10 +1,11 @@
 import React from 'react';
 import {Dimensions, Image, View} from 'react-native';
-import {fdr, fww} from '../../uiUtils';
+import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
 import R from 'ramda';
 import {Circle, Grid, Row} from '../../components';
 import {Proc} from '../../declarations';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
 
@@ -16,12 +17,21 @@ type PhotoItemProps = {
 
 const PhotoItem = (props: PhotoItemProps) => (
   <View>
+    <View
+      style={{
+        position: 'absolute',
+        width: side,
+        height: side,
+        ...centerStyle,
+        backgroundColor: '#F7F7F7',
+      }}>
+      <Icon name="image" size={side * 0.33} color="#C2C5C2" />
+    </View>
     <Image
       source={props.source}
       style={{
         width: side,
         height: side,
-        backgroundColor: '#F7F7F7',
         marginBottom: sizes.halfPadding,
       }}
     />
