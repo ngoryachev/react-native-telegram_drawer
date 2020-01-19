@@ -16,10 +16,10 @@ import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
-const stripHeight = 50;
+const panelHeight = 63;
 const handleHeight = 24;
 const stripThreshold =
-  side * 2 + sizes.halfPadding * 2 + stripHeight + handleHeight;
+  side * 2 + sizes.halfPadding * 2 + panelHeight + handleHeight;
 const stripTopThreshold = Dimensions.get('window').height;
 
 type PhotoItemProps = {
@@ -94,10 +94,11 @@ const CircleButton = (props: CircleButtonProps) => (
 );
 
 interface PickPhotoDrawerState {
-  selection: boolean[];
+  selection: Set<number>;
   panResponder: PanResponderInstance;
   position: Animated.Value;
   positionNumberRef: {current: number; started: number};
+  childrenTranslateY: Animated.Value;
 }
 
 interface PickPhotoDrawerProps {
@@ -109,7 +110,7 @@ class PickPhotoDrawer extends React.Component<
   PickPhotoDrawerState
 > {
   state: PickPhotoDrawerState = {
-    selection: R.map(R.always(false), this.props.data),
+    selection: new Set<number>(),
     positionNumberRef: {current: 0, started: null} as any,
     position: (() => {
       const animated = new Animated.Value(0);
@@ -141,18 +142,40 @@ class PickPhotoDrawer extends React.Component<
         return true;
       },
     }),
+    childrenTranslateY: new Animated.Value(0),
   };
 
   handlePhotoItemPress = (index: number) => {
     const {selection} = this.state;
-    const newSelection = R.over(R.lensIndex(index), R.not, selection);
+    const wasEmpty = selection.size === 0;
+    const selected = selection.has(index);
+    if (selected) {
+      selection.delete(index);
+    } else {
+      selection.add(index);
+    }
 
-    this.setState({selection: newSelection});
+    const becomeNotEmpty = wasEmpty && selection.size !== 0;
+    const becomeEmpty = !wasEmpty && selection.size === 0;
+
+    this.setState({selection: new Set([...selection])});
+
+    if (becomeNotEmpty) {
+      this.startPanelAppearAnimation();
+    }
   };
 
   startAppearAnimation = () => {
     Animated.timing(this.state.position, {
       toValue: stripThreshold,
+      duration: 500,
+    }).start();
+  };
+
+  startPanelAppearAnimation = () => {
+    this.state.childrenTranslateY.setValue(panelHeight);
+    Animated.timing(this.state.childrenTranslateY, {
+      toValue: 0,
       duration: 500,
     }).start();
   };
@@ -186,7 +209,7 @@ class PickPhotoDrawer extends React.Component<
         data={this.props.data}
         renderItem={({item, index}) => (
           <PhotoItem
-            isSelected={this.state.selection[index]}
+            isSelected={this.state.selection.has(index)}
             onPress={() => this.handlePhotoItemPress(index)}
           />
         )}
@@ -206,7 +229,7 @@ class PickPhotoDrawer extends React.Component<
   }) => <CircleButton name={name} onPress={onPress} isIcon={isIcon} />;
 
   shouldRenderStrip = () => {
-    return this.state.positionNumberRef.current > side * 2 + stripHeight;
+    return this.state.positionNumberRef.current > side * 2 + panelHeight;
   };
 
   renderStrip = () => (
@@ -214,24 +237,24 @@ class PickPhotoDrawer extends React.Component<
       Component={Animated.View}
       style={{
         position: 'absolute',
-        height: stripHeight,
+        height: panelHeight,
         bottom: 0,
         left: 0,
         right: 0,
         paddingHorizontal: 45,
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        backgroundColor: 'white',
         transform: [
           {
             translateY: this.state.position.interpolate({
               inputRange: [
-                stripThreshold - stripHeight,
+                stripThreshold - panelHeight,
                 stripThreshold,
                 stripTopThreshold - side,
                 stripTopThreshold,
               ],
-              outputRange: [stripHeight, 0, 0, stripHeight],
+              outputRange: [panelHeight, 0, 0, panelHeight],
               extrapolateRight: 'clamp',
             }),
           },
@@ -249,11 +272,22 @@ class PickPhotoDrawer extends React.Component<
   );
 
   renderChildren = () => {
-    return <View>{this.props.children}</View>;
+    return (
+      <Animated.View
+        style={{
+          transform: [
+            {
+              translateY: this.state.childrenTranslateY,
+            },
+          ],
+        }}>
+        {this.props.children}
+      </Animated.View>
+    );
   };
 
   render = () => {
-    const isAnySelection = R.any(R.identity, this.state.selection);
+    const isAnySelection = this.state.selection.size > 0;
 
     return (
       <>
