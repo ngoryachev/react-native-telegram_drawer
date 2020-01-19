@@ -29,6 +29,8 @@ target 'telegram_drawer' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'telegram_drawerTests' do
     inherit! :search_paths
     # Pods for testing
