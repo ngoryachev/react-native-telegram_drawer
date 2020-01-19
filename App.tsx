@@ -8,8 +8,8 @@
  * @format
  */
 
-import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Filler, Spacer} from './uiUtils';
 import {Circle, Column, Row} from './components';
 import sizes from './src/styles/sizes';
@@ -18,6 +18,8 @@ import IconEvil from 'react-native-vector-icons/EvilIcons';
 import PickPhotoDrawer from './src/components/PickPhotoDrawer';
 
 const App = () => {
+  const drawerEl = useRef<PickPhotoDrawer>(null);
+
   return (
     <View style={{backgroundColor: 'gray', flex: 1}}>
       <Filler />
@@ -28,7 +30,15 @@ const App = () => {
             height: 63,
             paddingHorizontal: sizes.padding,
           }}>
-          <Icon name="paperclip" size={21} color="#958FAA" />
+          <TouchableOpacity
+            onPress={() => {
+              if (drawerEl.current) {
+                drawerEl.current.startAppearAnimation();
+              }
+            }}
+          >
+            <Icon name="paperclip" size={21} color="#958FAA" />
+          </TouchableOpacity>
           <Spacer w={31} />
           <TextInput
             placeholderTextColor="#958FAA"
@@ -67,7 +77,7 @@ const App = () => {
           </Circle>
         </Row>
       </Column>
-      <PickPhotoDrawer data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]} />
+      <PickPhotoDrawer data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]} ref={drawerEl} />
     </View>
   );
 };

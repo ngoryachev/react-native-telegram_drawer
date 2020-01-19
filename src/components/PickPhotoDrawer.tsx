@@ -1,5 +1,13 @@
 import React from 'react';
-import {Dimensions, Image, View, Text} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  View,
+  Text,
+  PanResponder,
+  PanResponderInstance,
+  Animated,
+} from 'react-native';
 import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
 import R from 'ramda';
@@ -82,6 +90,9 @@ const CircleButton = (props: CircleButtonProps) => (
 
 interface PickPhotoDrawerState {
   selection: boolean[];
+  panResponder: PanResponderInstance;
+  position: Animated.Value;
+  positionNumberRef: { current: number, started: number };
 }
 
 interface PickPhotoDrawerProps {
@@ -92,8 +103,34 @@ class PickPhotoDrawer extends React.Component<
   PickPhotoDrawerProps,
   PickPhotoDrawerState
 > {
-  state = {
+  state: PickPhotoDrawerState = {
     selection: R.map(R.always(false), this.props.data),
+    positionNumberRef: {current: 0, started: null} as any,
+    position: (() => {
+      const animated = new Animated.Value(0);
+      animated.addListener(
+        ({value}) => (this.state.positionNumberRef.current = value),
+      );
+
+      return animated;
+    })(),
+    panResponder: PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderStart: () => {
+        this.state.positionNumberRef.started = this.state.positionNumberRef.current;
+        return true;
+      },
+      onPanResponderMove: (event, gesture) => {
+        console.log({
+          h: this.state.positionNumberRef.current,
+          dy: gesture.dy,
+          y0: gesture.y0,
+        });
+        this.state.position.setValue(
+          this.state.positionNumberRef.started - gesture.dy,
+        );
+      },
+    }),
   };
 
   handlePhotoItemPress = (index: number) => {
@@ -101,6 +138,13 @@ class PickPhotoDrawer extends React.Component<
     const newSelection = R.over(R.lensIndex(index), R.not, selection);
 
     this.setState({selection: newSelection});
+  };
+
+  startAppearAnimation = () => {
+    Animated.timing(this.state.position, {
+      toValue: 400,
+      duration: 500,
+    }).start();
   };
 
   renderGrid = () => {
@@ -161,20 +205,21 @@ class PickPhotoDrawer extends React.Component<
 
   render = () => {
     return (
-      <View
+      <Animated.View
+        {...this.state.panResponder.panHandlers}
         style={{
           flex: 1,
           backgroundColor: 'white',
           position: 'absolute',
           width: '100%',
-          height: '50%',
+          height: this.state.position,
           bottom: 0,
           borderTopLeftRadius: sizes.borderRadius,
           borderTopRightRadius: sizes.borderRadius,
         }}>
         {this.renderGrid()}
         {this.renderStrip()}
-      </View>
+      </Animated.View>
     );
   };
 }
