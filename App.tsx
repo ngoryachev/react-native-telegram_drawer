@@ -8,17 +8,31 @@
  * @format
  */
 
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
 import {Spacer} from './uiUtils';
-import {Column, Row} from './components';
+import {Row} from './components';
 import sizes from './src/styles/sizes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconEvil from 'react-native-vector-icons/EvilIcons';
 import PickPhotoDrawer from './src/components/PickPhotoDrawer';
+import CameraRoll, {PhotoIdentifier, PhotoIdentifiersPage} from '@react-native-community/cameraroll';
+import {READ_STORAGE, requestPermission} from "./src/utils/permissions";
 
 const App = () => {
   const drawerEl = useRef<PickPhotoDrawer>(null);
+  const [photos, setPhotos] = useState<PhotoIdentifier[]>([]);
+  useEffect(() => {
+    requestPermission(READ_STORAGE).then(() => (
+      CameraRoll.getPhotos({
+        first: 30,
+        assetType: 'Photos',
+      })
+    ))
+    .then((r: PhotoIdentifiersPage) => {
+      setPhotos(r.edges);
+    });
+  }, []);
 
   return (
     <View style={{backgroundColor: 'gray', flex: 1}}>
@@ -28,29 +42,7 @@ const App = () => {
         onPress={() => drawerEl.current!.startDisappearAnimation()}
       />
       <PickPhotoDrawer
-        data={[
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20,
-          21,
-        ]}
+        data={photos}
         ref={drawerEl}>
         <Row
           alignCenter

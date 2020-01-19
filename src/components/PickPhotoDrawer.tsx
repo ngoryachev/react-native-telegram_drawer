@@ -6,7 +6,7 @@ import {
   Text,
   PanResponder,
   PanResponderInstance,
-  Animated,
+  Animated, ImageURISource,
 } from 'react-native';
 import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
@@ -14,6 +14,7 @@ import R from 'ramda';
 import {Circle, Grid, Items, Row} from '../../components';
 import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {PhotoIdentifier} from "@react-native-community/cameraroll";
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
 const panelHeight = 63;
@@ -25,7 +26,7 @@ const defaultDuration = 500;
 
 type PhotoItemProps = {
   onPress?: Proc;
-  source?: any;
+  uri?: string;
   isSelected: boolean;
 };
 
@@ -42,7 +43,7 @@ const PhotoItem = (props: PhotoItemProps) => (
       <Icon name="image" size={side * 0.33} color="#C2C5C2" />
     </View>
     <Image
-      source={props.source}
+      source={{uri: props.uri}}
       style={{
         width: side,
         height: side,
@@ -103,7 +104,7 @@ interface PickPhotoDrawerState {
 }
 
 interface PickPhotoDrawerProps {
-  data: any[];
+  data: PhotoIdentifier[];
 }
 
 class PickPhotoDrawer extends React.Component<
@@ -206,6 +207,7 @@ class PickPhotoDrawer extends React.Component<
         data={this.props.data}
         renderItem={({item, index}) => (
           <PhotoItem
+            uri ={item.node.image.uri}
             isSelected={this.state.selection.has(index)}
             onPress={() => this.handlePhotoItemPress(index)}
           />
