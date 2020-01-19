@@ -17,8 +17,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
 const stripHeight = 50;
-const stripThreshold = side * 2 + sizes.halfPadding * 2 + stripHeight;
 const handleHeight = 24;
+const stripThreshold = side * 2 + sizes.halfPadding * 2 + stripHeight + handleHeight;
+const stripTopThreshold = Dimensions.get('window').height;
 
 type PhotoItemProps = {
   onPress?: Proc;
@@ -209,6 +210,7 @@ class PickPhotoDrawer extends React.Component<
 
   renderStrip = () => (
     <Items
+      Component={Animated.View}
       style={{
         position: 'absolute',
         height: stripHeight,
@@ -219,6 +221,13 @@ class PickPhotoDrawer extends React.Component<
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        transform: [{
+          translateY: this.state.position.interpolate({
+            inputRange: [stripThreshold - stripHeight, stripThreshold, stripTopThreshold - side, stripTopThreshold],
+            outputRange: [stripHeight, 0, 0, stripHeight],
+            extrapolateRight: 'clamp',
+          }),
+        }] as any,
       }}
       data={[
         {name: 'image', isIcon: true, onPress: this.noop},
@@ -250,7 +259,7 @@ class PickPhotoDrawer extends React.Component<
           borderTopRightRadius: sizes.borderRadius,
         }}>
         {this.renderGrid()}
-        {this.shouldRenderStrip() ? this.renderStrip() : null}
+        {this.renderStrip()}
       </Animated.View>
     );
   };
