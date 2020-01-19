@@ -27,37 +27,34 @@ const App = () => {
         style={{flex: 1, backgroundColor: '#F2F7FA'}}
         onPress={() => drawerEl.current!.startDisappearAnimation()}
       />
-      <Column>
-        <Row
-          alignCenter
-          style={{
-            height: 63,
-            paddingHorizontal: sizes.padding,
-            backgroundColor: 'white',
+      <Row
+        alignCenter
+        style={{
+          height: 63,
+          paddingHorizontal: sizes.padding,
+          backgroundColor: 'white',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            if (drawerEl.current) {
+              drawerEl.current.startAppearAnimation();
+            }
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              if (drawerEl.current) {
-                drawerEl.current.startAppearAnimation();
-              }
-            }}>
-            <Icon name="paperclip" size={21} color="#958FAA" />
-          </TouchableOpacity>
-          <Spacer w={31} />
-          <TextInput
-            placeholderTextColor="#958FAA"
-            placeholder="Сообщение..."
-            style={{
-              fontSize: 16,
-              color: '#3D3737',
-              flex: 1,
-              fontFamily: 'Source Sans Pro',
-            }}
-          />
-          <IconEvil name="sc-telegram" size={25} color="#958FAA" />
-        </Row>
-        <View style={{width: '100%', height: 1, backgroundColor: '#F1F1F1'}} />
-      </Column>
+          <Icon name="paperclip" size={21} color="#958FAA" />
+        </TouchableOpacity>
+        <Spacer w={31} />
+        <TextInput
+          placeholderTextColor="#958FAA"
+          placeholder="Сообщение..."
+          style={{
+            fontSize: 16,
+            color: '#3D3737',
+            flex: 1,
+            fontFamily: 'Source Sans Pro',
+          }}
+        />
+        <IconEvil name="sc-telegram" size={25} color="#958FAA" />
+      </Row>
       <PickPhotoDrawer
         data={[
           1,
