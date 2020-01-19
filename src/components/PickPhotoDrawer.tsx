@@ -21,6 +21,7 @@ const handleHeight = 24;
 const stripThreshold =
   side * 2 + sizes.halfPadding * 2 + panelHeight + handleHeight;
 const stripTopThreshold = Dimensions.get('window').height;
+const defaultDuration = 500;
 
 type PhotoItemProps = {
   onPress?: Proc;
@@ -168,7 +169,7 @@ class PickPhotoDrawer extends React.Component<
   startAppearAnimation = () => {
     Animated.timing(this.state.position, {
       toValue: stripThreshold,
-      duration: 500,
+      duration: defaultDuration,
     }).start();
   };
 
@@ -176,20 +177,16 @@ class PickPhotoDrawer extends React.Component<
     this.state.childrenTranslateY.setValue(panelHeight);
     Animated.timing(this.state.childrenTranslateY, {
       toValue: 0,
-      duration: 500,
+      duration: defaultDuration,
     }).start();
   };
 
   startDisappearAnimation = () => {
     Animated.timing(this.state.position, {
       toValue: 0,
-      duration: 500,
+      duration: defaultDuration,
     }).start();
   };
-
-  startShowStripAnimation = () => {};
-
-  startHideStripAnimation = () => {};
 
   get maxHeight() {
     const rowCount = Math.ceil(this.props.data.length / 3);
@@ -227,10 +224,6 @@ class PickPhotoDrawer extends React.Component<
   }: {
     item: CircleButtonProps;
   }) => <CircleButton name={name} onPress={onPress} isIcon={isIcon} />;
-
-  shouldRenderStrip = () => {
-    return this.state.positionNumberRef.current > side * 2 + panelHeight;
-  };
 
   renderStrip = () => (
     <Items
