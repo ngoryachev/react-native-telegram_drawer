@@ -6,7 +6,7 @@ import {
   Text,
   PanResponder,
   PanResponderInstance,
-  Animated, ImageURISource,
+  Animated,
 } from 'react-native';
 import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
@@ -53,9 +53,9 @@ const PhotoItem = (props: PhotoItemProps) => (
     <Circle
       onPress={props.onPress}
       size={16}
-      color="white"
+      color="rgba(255, 255, 255, 0.8)"
       style={{position: 'absolute', right: 5, top: 5}}>
-      <Circle size={14} color={props.isSelected ? 'pink' : '#C2C5C2'} />
+      <Circle size={14} color={props.isSelected ? 'pink' : 'transparent'} />
     </Circle>
   </View>
 );
@@ -269,6 +269,7 @@ class PickPhotoDrawer extends React.Component<
   renderChildren = () => {
     return (
       <Animated.View
+        key="child"
         style={{
           transform: [
             {

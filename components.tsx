@@ -63,7 +63,7 @@ export const Circle = (props: CircleProps) => {
   return (
     <Component
       hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-      activeOpacity={props.onPress ? undefined : 1}
+      activeOpacity={props.onPress ? 0.8 : 1}
       onPress={props.onPress}
       style={{
         width: props.size,

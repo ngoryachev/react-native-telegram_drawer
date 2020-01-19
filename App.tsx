@@ -9,7 +9,7 @@
  */
 
 import React, {useRef, useEffect, useState} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TextInput, TouchableOpacity, View, Keyboard} from 'react-native';
 import {Spacer} from './uiUtils';
 import {Row} from './components';
 import sizes from './src/styles/sizes';
@@ -55,6 +55,7 @@ const App = () => {
             onPress={() => {
               if (drawerEl.current) {
                 drawerEl.current.startAppearAnimation();
+                Keyboard.dismiss();
               }
             }}>
             <Icon name="paperclip" size={21} color="#958FAA" />
