@@ -118,6 +118,8 @@ class PickPhotoDrawer extends React.Component<
       onStartShouldSetPanResponder: () => true,
       onPanResponderStart: () => {
         this.state.positionNumberRef.started = this.state.positionNumberRef.current;
+        // @ts-ignore
+        Animated.decay(this.state.position).stop();
         return true;
       },
       onPanResponderMove: (event, gesture) => {
@@ -133,7 +135,7 @@ class PickPhotoDrawer extends React.Component<
       onPanResponderRelease: (event, gesture) => {
         Animated.decay(this.state.position, {
           velocity: -gesture.vy,
-          deceleration: 0.998,
+          deceleration: 0.999,
         }).start();
 
         return true;
@@ -220,7 +222,10 @@ class PickPhotoDrawer extends React.Component<
           backgroundColor: 'white',
           position: 'absolute',
           width: '100%',
-          height: this.state.position,
+          height: this.state.position.interpolate({
+            inputRange: [Number.MIN_SAFE_INTEGER, 0, Number.MAX_SAFE_INTEGER],
+            outputRange: [0, 0, Number.MAX_SAFE_INTEGER]  // 0 : 150, 0.5 : 75, 1 : 0
+          }),
           bottom: 0,
           borderTopLeftRadius: sizes.borderRadius,
           borderTopRightRadius: sizes.borderRadius,
