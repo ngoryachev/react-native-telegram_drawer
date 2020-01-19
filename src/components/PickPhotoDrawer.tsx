@@ -18,7 +18,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
 const stripHeight = 50;
 const handleHeight = 24;
-const stripThreshold = side * 2 + sizes.halfPadding * 2 + stripHeight + handleHeight;
+const stripThreshold =
+  side * 2 + sizes.halfPadding * 2 + stripHeight + handleHeight;
 const stripTopThreshold = Dimensions.get('window').height;
 
 type PhotoItemProps = {
@@ -221,13 +222,20 @@ class PickPhotoDrawer extends React.Component<
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        transform: [{
-          translateY: this.state.position.interpolate({
-            inputRange: [stripThreshold - stripHeight, stripThreshold, stripTopThreshold - side, stripTopThreshold],
-            outputRange: [stripHeight, 0, 0, stripHeight],
-            extrapolateRight: 'clamp',
-          }),
-        }] as any,
+        transform: [
+          {
+            translateY: this.state.position.interpolate({
+              inputRange: [
+                stripThreshold - stripHeight,
+                stripThreshold,
+                stripTopThreshold - side,
+                stripTopThreshold,
+              ],
+              outputRange: [stripHeight, 0, 0, stripHeight],
+              extrapolateRight: 'clamp',
+            }),
+          },
+        ] as any,
       }}
       data={[
         {name: 'image', isIcon: true, onPress: this.noop},
@@ -240,27 +248,34 @@ class PickPhotoDrawer extends React.Component<
     />
   );
 
+  renderChildren = () => {
+    return <View>{this.props.children}</View>;
+  };
+
   render = () => {
     return (
-      <Animated.View
-        {...this.state.panResponder.panHandlers}
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-          position: 'absolute',
-          width: '100%',
-          height: this.state.position.interpolate({
-            inputRange: [Number.MIN_SAFE_INTEGER, 0, this.maxHeight],
-            outputRange: [0, 0, this.maxHeight],
-            extrapolateRight: 'clamp',
-          }),
-          bottom: 0,
-          borderTopLeftRadius: sizes.borderRadius,
-          borderTopRightRadius: sizes.borderRadius,
-        }}>
-        {this.renderGrid()}
-        {this.renderStrip()}
-      </Animated.View>
+      <>
+        {this.renderChildren()}
+        <Animated.View
+          {...this.state.panResponder.panHandlers}
+          style={{
+            flex: 1,
+            backgroundColor: 'white',
+            position: 'absolute',
+            width: '100%',
+            height: this.state.position.interpolate({
+              inputRange: [Number.MIN_SAFE_INTEGER, 0, this.maxHeight],
+              outputRange: [0, 0, this.maxHeight],
+              extrapolateRight: 'clamp',
+            }),
+            bottom: 0,
+            borderTopLeftRadius: sizes.borderRadius,
+            borderTopRightRadius: sizes.borderRadius,
+          }}>
+          {this.renderGrid()}
+          {this.renderStrip()}
+        </Animated.View>
+      </>
     );
   };
 }
