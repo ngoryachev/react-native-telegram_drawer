@@ -9,9 +9,9 @@
  */
 
 import React, {useRef} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {Filler, Spacer} from './uiUtils';
-import {Circle, Column, Row} from './components';
+import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import {Spacer} from './uiUtils';
+import {Column, Row} from './components';
 import sizes from './src/styles/sizes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconEvil from 'react-native-vector-icons/EvilIcons';
@@ -22,21 +22,25 @@ const App = () => {
 
   return (
     <View style={{backgroundColor: 'gray', flex: 1}}>
-      <Filler />
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{flex: 1, backgroundColor: '#F2F7FA'}}
+        onPress={() => drawerEl.current!.startDisappearAnimation()}
+      />
       <Column>
         <Row
           alignCenter
           style={{
             height: 63,
             paddingHorizontal: sizes.padding,
+            backgroundColor: 'white',
           }}>
           <TouchableOpacity
             onPress={() => {
               if (drawerEl.current) {
                 drawerEl.current.startAppearAnimation();
               }
-            }}
-          >
+            }}>
             <Icon name="paperclip" size={21} color="#958FAA" />
           </TouchableOpacity>
           <Spacer w={31} />
@@ -53,31 +57,33 @@ const App = () => {
           <IconEvil name="sc-telegram" size={25} color="#958FAA" />
         </Row>
         <View style={{width: '100%', height: 1, backgroundColor: '#F1F1F1'}} />
-        <Row
-          alignCenter
-          style={{
-            height: 50,
-            backgroundColor: 'white',
-            paddingHorizontal: sizes.padding,
-          }}>
-          <Icon name="angle-left" size={21} color="#958FAA" />
-          <Spacer w={4} />
-          <Text
-            style={{
-              fontSize: 16,
-              color: '#777777',
-              flex: 1,
-              fontFamily: 'Source Sans Pro',
-            }}>
-            назад
-          </Text>
-          <Filler />
-          <Circle size={40} color="#3D3737">
-            <Icon name="microphone" size={16} color="white" />
-          </Circle>
-        </Row>
       </Column>
-      <PickPhotoDrawer data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]} ref={drawerEl} />
+      <PickPhotoDrawer
+        data={[
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+        ]}
+        ref={drawerEl}
+      />
     </View>
   );
 };

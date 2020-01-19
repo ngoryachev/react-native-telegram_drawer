@@ -16,6 +16,9 @@ import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
+const stripHeight = 50;
+const stripThreshold = side * 2 + sizes.halfPadding * 2 + stripHeight;
+const handleHeight = 24;
 
 type PhotoItemProps = {
   onPress?: Proc;
@@ -58,7 +61,7 @@ const Handle = () => (
     alignCenter
     justifyCenter
     style={{
-      height: 24,
+      height: handleHeight,
     }}>
     <View
       style={{
@@ -123,11 +126,6 @@ class PickPhotoDrawer extends React.Component<
         return true;
       },
       onPanResponderMove: (event, gesture) => {
-        console.log({
-          h: this.state.positionNumberRef.current,
-          dy: gesture.dy,
-          y0: gesture.y0,
-        });
         this.state.position.setValue(
           this.state.positionNumberRef.started - gesture.dy,
         );
@@ -152,10 +150,26 @@ class PickPhotoDrawer extends React.Component<
 
   startAppearAnimation = () => {
     Animated.timing(this.state.position, {
-      toValue: 400,
+      toValue: stripThreshold,
       duration: 500,
     }).start();
   };
+
+  startDisappearAnimation = () => {
+    Animated.timing(this.state.position, {
+      toValue: 0,
+      duration: 500,
+    }).start();
+  };
+
+  startShowStripAnimation = () => {};
+
+  startHideStripAnimation = () => {};
+
+  get maxHeight() {
+    const rowCount = Math.ceil(this.props.data.length / 3);
+    return rowCount * side + handleHeight + sizes.halfPadding * (rowCount - 1);
+  }
 
   renderGrid = () => {
     return (
@@ -189,18 +203,22 @@ class PickPhotoDrawer extends React.Component<
     item: CircleButtonProps;
   }) => <CircleButton name={name} onPress={onPress} isIcon={isIcon} />;
 
+  shouldRenderStrip = () => {
+    return this.state.positionNumberRef.current > side * 2 + stripHeight;
+  };
+
   renderStrip = () => (
     <Items
       style={{
         position: 'absolute',
-        height: 50,
+        height: stripHeight,
         bottom: 0,
         left: 0,
         right: 0,
         paddingHorizontal: 45,
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
       }}
       data={[
         {name: 'image', isIcon: true, onPress: this.noop},
@@ -223,15 +241,16 @@ class PickPhotoDrawer extends React.Component<
           position: 'absolute',
           width: '100%',
           height: this.state.position.interpolate({
-            inputRange: [Number.MIN_SAFE_INTEGER, 0, Number.MAX_SAFE_INTEGER],
-            outputRange: [0, 0, Number.MAX_SAFE_INTEGER]  // 0 : 150, 0.5 : 75, 1 : 0
+            inputRange: [Number.MIN_SAFE_INTEGER, 0, this.maxHeight],
+            outputRange: [0, 0, this.maxHeight],
+            extrapolateRight: 'clamp',
           }),
           bottom: 0,
           borderTopLeftRadius: sizes.borderRadius,
           borderTopRightRadius: sizes.borderRadius,
         }}>
         {this.renderGrid()}
-        {this.renderStrip()}
+        {this.shouldRenderStrip() ? this.renderStrip() : null}
       </Animated.View>
     );
   };

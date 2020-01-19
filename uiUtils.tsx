@@ -11,7 +11,7 @@ export const Spacer = ({w = 0, h = 0, c = 'transparent'}: SpacerProps) => (
   <View style={{height: h, width: w, backgroundColor: c}} />
 );
 
-export const Filler = ({}) => <View style={{flex: 1}} />;
+export const Filler = ({ style }: {style?: ViewStyle}) => <View style={{flex: 1, ...style}} />;
 
 type TextStyleProps = {
   s: 1 | 2 | 3 | 4 | 5 | 6;
