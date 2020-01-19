@@ -92,7 +92,7 @@ interface PickPhotoDrawerState {
   selection: boolean[];
   panResponder: PanResponderInstance;
   position: Animated.Value;
-  positionNumberRef: { current: number, started: number };
+  positionNumberRef: {current: number; started: number};
 }
 
 interface PickPhotoDrawerProps {
@@ -129,6 +129,14 @@ class PickPhotoDrawer extends React.Component<
         this.state.position.setValue(
           this.state.positionNumberRef.started - gesture.dy,
         );
+      },
+      onPanResponderRelease: (event, gesture) => {
+        Animated.decay(this.state.position, {
+          velocity: -gesture.vy,
+          deceleration: 0.998,
+        }).start();
+
+        return true;
       },
     }),
   };
