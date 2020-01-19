@@ -14,7 +14,7 @@ import R from 'ramda';
 import {Circle, Grid, Items, Row} from '../../components';
 import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {PhotoIdentifier} from "@react-native-community/cameraroll";
+import {PhotoIdentifier} from '@react-native-community/cameraroll';
 
 const side = (Dimensions.get('window').width - sizes.padding * 3) / 3;
 const panelHeight = 63;
@@ -191,7 +191,12 @@ class PickPhotoDrawer extends React.Component<
 
   get maxHeight() {
     const rowCount = Math.ceil(this.props.data.length / 3);
-    return rowCount * side + handleHeight + sizes.halfPadding * (rowCount - 1);
+    return (
+      panelHeight +
+      rowCount * side +
+      handleHeight +
+      sizes.halfPadding * (rowCount - 1)
+    );
   }
 
   renderGrid = () => {
@@ -207,7 +212,7 @@ class PickPhotoDrawer extends React.Component<
         data={this.props.data}
         renderItem={({item, index}) => (
           <PhotoItem
-            uri ={item.node.image.uri}
+            uri={item.node.image.uri}
             isSelected={this.state.selection.has(index)}
             onPress={() => this.handlePhotoItemPress(index)}
           />

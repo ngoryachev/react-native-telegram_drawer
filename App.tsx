@@ -9,41 +9,57 @@
  */
 
 import React, {useRef, useEffect, useState} from 'react';
-import {StyleSheet, TextInput, TouchableOpacity, View, Keyboard} from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {Spacer} from './uiUtils';
 import {Row} from './components';
 import sizes from './src/styles/sizes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconEvil from 'react-native-vector-icons/EvilIcons';
 import PickPhotoDrawer from './src/components/PickPhotoDrawer';
-import CameraRoll, {PhotoIdentifier, PhotoIdentifiersPage} from '@react-native-community/cameraroll';
-import {READ_STORAGE, requestPermission} from "./src/utils/permissions";
+import CameraRoll, {
+  PhotoIdentifier,
+  PhotoIdentifiersPage,
+} from '@react-native-community/cameraroll';
+import {READ_STORAGE, requestPermission} from './src/utils/permissions';
 
 const App = () => {
   const drawerEl = useRef<PickPhotoDrawer>(null);
   const [photos, setPhotos] = useState<PhotoIdentifier[]>([]);
   useEffect(() => {
-    requestPermission(READ_STORAGE).then(() => (
-      CameraRoll.getPhotos({
-        first: 30,
-        assetType: 'Photos',
-      })
-    ))
-    .then((r: PhotoIdentifiersPage) => {
-      setPhotos(r.edges);
-    });
+    requestPermission(READ_STORAGE)
+      .then(() =>
+        CameraRoll.getPhotos({
+          first: 30,
+          assetType: 'Photos',
+        }),
+      )
+      .then((r: PhotoIdentifiersPage) => {
+        setPhotos(r.edges);
+      });
   }, []);
 
+  const keyboardBehaviour: any = Platform.select({
+    ios: 'padding',
+    android: undefined,
+  });
+
   return (
-    <View style={{backgroundColor: 'gray', flex: 1}}>
+    <KeyboardAvoidingView
+      style={{backgroundColor: 'gray', flex: 1}}
+      behavior={keyboardBehaviour}>
       <TouchableOpacity
         activeOpacity={1}
         style={{flex: 1, backgroundColor: '#F2F7FA'}}
         onPress={() => drawerEl.current!.startDisappearAnimation()}
       />
-      <PickPhotoDrawer
-        data={photos}
-        ref={drawerEl}>
+      <PickPhotoDrawer data={photos} ref={drawerEl}>
         <Row
           alignCenter
           style={{
@@ -74,7 +90,7 @@ const App = () => {
           <IconEvil name="sc-telegram" size={25} color="#958FAA" />
         </Row>
       </PickPhotoDrawer>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
