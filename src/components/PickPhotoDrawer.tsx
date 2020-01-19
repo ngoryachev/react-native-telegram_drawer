@@ -253,9 +253,11 @@ class PickPhotoDrawer extends React.Component<
   };
 
   render = () => {
+    const isAnySelection = R.any(R.identity, this.state.selection);
+
     return (
       <>
-        {this.renderChildren()}
+        {!isAnySelection && this.renderChildren()}
         <Animated.View
           {...this.state.panResponder.panHandlers}
           style={{
@@ -275,6 +277,7 @@ class PickPhotoDrawer extends React.Component<
           {this.renderGrid()}
           {this.renderStrip()}
         </Animated.View>
+        {isAnySelection && this.renderChildren()}
       </>
     );
   };
