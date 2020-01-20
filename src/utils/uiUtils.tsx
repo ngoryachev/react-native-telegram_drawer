@@ -13,34 +13,6 @@ export const Spacer = ({w = 0, h = 0, c = 'transparent'}: SpacerProps) => (
 
 export const Filler = ({ style }: {style?: ViewStyle}) => <View style={{flex: 1, ...style}} />;
 
-type TextStyleProps = {
-  s: 1 | 2 | 3 | 4 | 5 | 6;
-  c?: 'w' | 'b' | 'g';
-  center?: boolean;
-};
-
-const sizes = {
-  1: 10,
-  2: 12,
-  3: 16,
-  4: 20,
-  5: 26,
-  6: 32,
-};
-
-export const createTextStyle = ({s, c, center}: TextStyleProps): {} => {
-  const size = sizes[s];
-
-  const color = c === 'w' ? 'white' : 'black';
-  const ret: StyleProp<TextStyle> = {
-    fontSize: size,
-    color: color,
-    textAlign: typeof center === 'boolean' ? 'center' : 'left',
-  };
-
-  return ret as {};
-};
-
 export const centerStyle: {} = {justifyContent: 'center', alignItems: 'center'};
 
 export const wh = (w: number, h: number = w) => ({width: w, height: h});

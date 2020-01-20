@@ -14,8 +14,8 @@ import CameraRoll, {
   PhotoIdentifiersPage,
 } from '@react-native-community/cameraroll';
 import PickPhotoDrawer from '../..//src/components/PickPhotoDrawer';
-import {Spacer} from '../../uiUtils';
-import {Row} from '../../components';
+import {Spacer} from '../utils/uiUtils';
+import {Row} from '../components/components';
 import sizes from '../../src/styles/sizes';
 import {READ_STORAGE, requestPermission} from '../utils/permissions';
 

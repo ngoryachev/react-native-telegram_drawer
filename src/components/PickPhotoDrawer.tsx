@@ -9,10 +9,10 @@ import {
   Animated,
   StyleSheet,
 } from 'react-native';
-import {centerStyle, fdr, fww} from '../../uiUtils';
+import {centerStyle, fdr, fww} from '../utils/uiUtils';
 import sizes from '../styles/sizes';
 import R from 'ramda';
-import {Circle, Grid, Items, Row} from '../../components';
+import {Circle, Grid, Items, Row} from './components';
 import {Proc} from '../../declarations';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {PhotoIdentifier} from '@react-native-community/cameraroll';

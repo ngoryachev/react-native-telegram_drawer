@@ -6,8 +6,8 @@ import {
   View, ViewProps,
   ViewStyle,
 } from 'react-native';
-import {centerStyle, fdr, fww} from './uiUtils';
-import {Proc} from './declarations';
+import {centerStyle, fdr, fww} from '../utils/uiUtils';
+import {Proc} from '../../declarations';
 
 export interface LineProps {
   children?: any;
