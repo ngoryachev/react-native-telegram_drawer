@@ -32,11 +32,17 @@ type PhotoItemProps = {
 };
 
 const PhotoItem = (props: PhotoItemProps) => (
-  <View>
+  <View style={styles.photoItemContainerStyle}>
     <View style={styles.photoBgStyle}>
       <Icon name="image" size={side * 0.33} color="#C2C5C2" />
     </View>
-    <Image source={{uri: props.uri}} style={styles.photoImageStyle} />
+    <Image
+      source={{uri: props.uri}}
+      style={{
+        width: props.isSelected ? side * 0.9 : side,
+        height: props.isSelected ? side * 0.9 : side,
+      }}
+    />
     <Circle
       onPress={props.onPress}
       size={16}
@@ -62,7 +68,9 @@ type CircleButtonProps = {
 const CircleButton = (props: CircleButtonProps) => (
   <Circle size={40} color="#3D3737" onPress={props.onPress}>
     {props.isIcon && <Icon name={props.name} color="#F2F2F2" size={18} />}
-    {!props.isIcon && <Text style={styles.circleButtonTextStyle}>{props.name}</Text>}
+    {!props.isIcon && (
+      <Text style={styles.circleButtonTextStyle}>{props.name}</Text>
+    )}
   </Circle>
 );
 
@@ -201,23 +209,25 @@ class PickPhotoDrawer extends React.Component<
   renderStrip = () => (
     <Items
       Component={Animated.View}
-      style={{
-        ...styles.stripStyle,
-        transform: [
-          {
-            translateY: this.state.position.interpolate({
-              inputRange: [
-                stripThreshold - panelHeight,
-                stripThreshold,
-                stripTopThreshold - side,
-                stripTopThreshold,
-              ],
-              outputRange: [panelHeight, 0, 0, panelHeight],
-              extrapolateRight: 'clamp',
-            }),
-          },
-        ],
-      } as {}}
+      style={
+        {
+          ...styles.stripStyle,
+          transform: [
+            {
+              translateY: this.state.position.interpolate({
+                inputRange: [
+                  stripThreshold - panelHeight,
+                  stripThreshold,
+                  stripTopThreshold - side,
+                  stripTopThreshold,
+                ],
+                outputRange: [panelHeight, 0, 0, panelHeight],
+                extrapolateRight: 'clamp',
+              }),
+            },
+          ],
+        } as {}
+      }
       data={[
         {name: 'image', isIcon: true, onPress: this.noop},
         {name: 'file-o', isIcon: true, onPress: this.noop},
@@ -278,11 +288,6 @@ const styles = StyleSheet.create({
     ...centerStyle,
     backgroundColor: '#F7F7F7',
   },
-  photoImageStyle: {
-    width: side,
-    height: side,
-    marginBottom: sizes.halfPadding,
-  },
   photoCheckboxStyle: {position: 'absolute', right: 5, top: 5},
   stripStyle: {
     position: 'absolute',
@@ -320,6 +325,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: sizes.borderRadius,
   },
   circleButtonTextStyle: {fontSize: 12, fontWeight: 'bold', color: '#F2F2F2'},
+  photoItemContainerStyle: {
+    width: side,
+    height: side,
+    marginBottom: sizes.halfPadding,
+    ...centerStyle,
+  },
 });
 
 export default PickPhotoDrawer;
