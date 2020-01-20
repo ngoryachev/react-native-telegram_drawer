@@ -32,6 +32,8 @@ import {READ_STORAGE, requestPermission} from '../utils/permissions';
 const ChatScreen = () => {
   const drawerEl = useRef<PickPhotoDrawer>(null);
   const [photos, setPhotos] = useState<PhotoIdentifier[]>([]);
+  const [message, setMessage] = useState<string>('');
+
   useEffect(() => {
     requestPermission(READ_STORAGE)
       .then(() =>
@@ -80,8 +82,12 @@ const ChatScreen = () => {
             placeholderTextColor="#958FAA"
             placeholder="Сообщение..."
             style={styles.inputStyle}
+            onChangeText={text => setMessage(text)}
+            value={message}
           />
-          <IconEvil name="sc-telegram" size={25} color="#958FAA" />
+          <TouchableOpacity onPress={() => setMessage('')}>
+            <IconEvil name="sc-telegram" size={25} color="#958FAA" />
+          </TouchableOpacity>
         </Row>
       </PickPhotoDrawer>
     </KeyboardAvoidingView>
