@@ -36,7 +36,7 @@ const App = () => {
     requestPermission(READ_STORAGE)
       .then(() =>
         CameraRoll.getPhotos({
-          first: 30,
+          first: 60,
           assetType: 'Photos',
         }),
       )

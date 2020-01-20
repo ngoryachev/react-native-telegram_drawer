@@ -303,7 +303,7 @@ class PickPhotoDrawer extends React.Component<
             height: this.state.position.interpolate({
               inputRange: [Number.MIN_SAFE_INTEGER, 0, this.maxHeight],
               outputRange: [0, 0, this.maxHeight],
-              extrapolateRight: 'clamp',
+              // extrapolateRight: 'clamp',
             }),
             bottom: 0,
             borderTopLeftRadius: sizes.borderRadius,
