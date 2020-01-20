@@ -7,6 +7,7 @@ import {
   PanResponder,
   PanResponderInstance,
   Animated,
+  StyleSheet,
 } from 'react-native';
 import {centerStyle, fdr, fww} from '../../uiUtils';
 import sizes from '../styles/sizes';
@@ -32,49 +33,23 @@ type PhotoItemProps = {
 
 const PhotoItem = (props: PhotoItemProps) => (
   <View>
-    <View
-      style={{
-        position: 'absolute',
-        width: side,
-        height: side,
-        ...centerStyle,
-        backgroundColor: '#F7F7F7',
-      }}>
+    <View style={styles.photoBgStyle}>
       <Icon name="image" size={side * 0.33} color="#C2C5C2" />
     </View>
-    <Image
-      source={{uri: props.uri}}
-      style={{
-        width: side,
-        height: side,
-        marginBottom: sizes.halfPadding,
-      }}
-    />
+    <Image source={{uri: props.uri}} style={styles.photoImageStyle} />
     <Circle
       onPress={props.onPress}
       size={16}
       color="rgba(255, 255, 255, 0.8)"
-      style={{position: 'absolute', right: 5, top: 5}}>
+      style={styles.photoCheckboxStyle}>
       <Circle size={14} color={props.isSelected ? 'pink' : 'transparent'} />
     </Circle>
   </View>
 );
 
 const Handle = () => (
-  <Row
-    alignCenter
-    justifyCenter
-    style={{
-      height: handleHeight,
-    }}>
-    <View
-      style={{
-        width: 43,
-        height: 6,
-        backgroundColor: '#C1C1C1',
-        borderRadius: 3,
-      }}
-    />
+  <Row alignCenter justifyCenter style={styles.handleContainerStyle}>
+    <View style={styles.handleViewStyle} />
   </Row>
 );
 
@@ -87,11 +62,7 @@ type CircleButtonProps = {
 const CircleButton = (props: CircleButtonProps) => (
   <Circle size={40} color="#3D3737" onPress={props.onPress}>
     {props.isIcon && <Icon name={props.name} color="#F2F2F2" size={18} />}
-    {!props.isIcon && (
-      <Text style={{fontSize: 12, fontWeight: 'bold', color: '#F2F2F2'}}>
-        {props.name}
-      </Text>
-    )}
+    {!props.isIcon && <Text style={styles.circleButtonTextStyle}>{props.name}</Text>}
   </Circle>
 );
 
@@ -202,12 +173,7 @@ class PickPhotoDrawer extends React.Component<
   renderGrid = () => {
     return (
       <Grid
-        style={{
-          ...fdr,
-          ...fww,
-          justifyContent: 'space-between',
-          paddingHorizontal: sizes.padding,
-        }}
+        style={styles.gridContainerStyle}
         showsVerticalScrollIndicator={false}
         data={this.props.data}
         renderItem={({item, index}) => (
@@ -236,15 +202,7 @@ class PickPhotoDrawer extends React.Component<
     <Items
       Component={Animated.View}
       style={{
-        position: 'absolute',
-        height: panelHeight,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        paddingHorizontal: 45,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: 'white',
+        ...styles.stripStyle,
         transform: [
           {
             translateY: this.state.position.interpolate({
@@ -258,8 +216,8 @@ class PickPhotoDrawer extends React.Component<
               extrapolateRight: 'clamp',
             }),
           },
-        ] as any,
-      }}
+        ],
+      } as {}}
       data={[
         {name: 'image', isIcon: true, onPress: this.noop},
         {name: 'file-o', isIcon: true, onPress: this.noop},
@@ -296,18 +254,12 @@ class PickPhotoDrawer extends React.Component<
         <Animated.View
           {...this.state.panResponder.panHandlers}
           style={{
-            flex: 1,
-            backgroundColor: 'white',
-            position: 'absolute',
-            width: '100%',
+            ...styles.animatedViewStyle,
             height: this.state.position.interpolate({
               inputRange: [Number.MIN_SAFE_INTEGER, 0, this.maxHeight],
               outputRange: [0, 0, this.maxHeight],
               // extrapolateRight: 'clamp',
             }),
-            bottom: 0,
-            borderTopLeftRadius: sizes.borderRadius,
-            borderTopRightRadius: sizes.borderRadius,
           }}>
           {this.renderGrid()}
           {this.renderStrip()}
@@ -317,5 +269,57 @@ class PickPhotoDrawer extends React.Component<
     );
   };
 }
+
+const styles = StyleSheet.create({
+  photoBgStyle: {
+    position: 'absolute',
+    width: side,
+    height: side,
+    ...centerStyle,
+    backgroundColor: '#F7F7F7',
+  },
+  photoImageStyle: {
+    width: side,
+    height: side,
+    marginBottom: sizes.halfPadding,
+  },
+  photoCheckboxStyle: {position: 'absolute', right: 5, top: 5},
+  stripStyle: {
+    position: 'absolute',
+    height: panelHeight,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 45,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  handleContainerStyle: {
+    height: handleHeight,
+  },
+  handleViewStyle: {
+    width: 43,
+    height: 6,
+    backgroundColor: '#C1C1C1',
+    borderRadius: 3,
+  },
+  gridContainerStyle: {
+    ...fdr,
+    ...fww,
+    justifyContent: 'space-between',
+    paddingHorizontal: sizes.padding,
+  },
+  animatedViewStyle: {
+    flex: 1,
+    backgroundColor: 'white',
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    borderTopLeftRadius: sizes.borderRadius,
+    borderTopRightRadius: sizes.borderRadius,
+  },
+  circleButtonTextStyle: {fontSize: 12, fontWeight: 'bold', color: '#F2F2F2'},
+});
 
 export default PickPhotoDrawer;
