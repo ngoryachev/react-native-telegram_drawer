@@ -50,6 +50,11 @@ const ChatScreen = () => {
     android: undefined,
   });
 
+  const handleClickOutside = () => {
+    drawerEl.current!.startDisappearAnimation();
+    Keyboard.dismiss();
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.containerStyle}
@@ -57,7 +62,7 @@ const ChatScreen = () => {
       <TouchableOpacity
         activeOpacity={1}
         style={styles.fillerStyle}
-        onPress={() => drawerEl.current!.startDisappearAnimation()}
+        onPress={handleClickOutside}
       />
       <PickPhotoDrawer data={photos} ref={drawerEl}>
         <Row alignCenter style={styles.inputContainer}>
