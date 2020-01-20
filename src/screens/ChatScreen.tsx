@@ -59,6 +59,7 @@ const ChatScreen = () => {
       <PickPhotoDrawer data={photos} ref={drawerEl}>
         <Row alignCenter style={styles.inputContainer}>
           <TouchableOpacity
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
             onPress={() => {
               if (drawerEl.current) {
                 drawerEl.current.startAppearAnimation();
@@ -75,7 +76,9 @@ const ChatScreen = () => {
             onChangeText={text => setMessage(text)}
             value={message}
           />
-          <TouchableOpacity onPress={() => setMessage('')}>
+          <TouchableOpacity
+            onPress={() => setMessage('')}
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
             <IconEvil name="sc-telegram" size={25} color="#958FAA" />
           </TouchableOpacity>
         </Row>
